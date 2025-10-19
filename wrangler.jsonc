@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "assets": {
+    "directory": "./dist"
+  },
+  "compatibility_date": "2025-10-17",
+  "name": "winecellar",
+  "routes": [
+    {
+      "custom_domain": true,
+      "pattern": "wine.grepco.net"
+    }
+  ],
+  "vars": {
+    "NODE_VERSION": 22
+  }
+}
