@@ -1,0 +1,218 @@
+---
+import { getCollection, getEntries } from "astro:content";
+
+import Card from "../../components/card.astro";
+import TabPanel from "../../components/tab-panel.astro";
+import Tab from "../../components/tab.astro";
+import Tabs from "../../components/tabs.astro";
+import SubpageLayout from "../../layouts/subpage.astro";
+import "../_tabs.css";
+
+const collection = await getCollection("makers");
+
+const winemakers = await getEntries(collection);
+
+// Sort makers alphabetically by name
+winemakers.sort((a, b) => a.data.name.localeCompare(b.data.name));
+
+const wineCountByMaker = Object.fromEntries(
+  winemakers.map((maker) => [maker.id, 0]),
+);
+
+for (const maker of winemakers) {
+  const wines = await getCollection("wines", ({ data }) => {
+    return data.maker.id === maker.id;
+  });
+
+  wineCountByMaker[maker.id] = wines.length;
+}
+
+const TABS = [
+  { id: "list", label: "List" },
+  { id: "map", label: "Map" },
+];
+---
+
+<script>
+  import type { CollectionEntry } from "astro:content";
+
+  import Leaflet from "leaflet";
+  import markerIconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+  import markerIconUrl from "leaflet/dist/images/marker-icon.png";
+  import markerShadowUrl from "leaflet/dist/images/marker-shadow.png";
+  import "leaflet.markercluster";
+  import "leaflet/dist/leaflet.css";
+  import "leaflet.markercluster/dist/MarkerCluster.css";
+
+  // https://cescobaz.com/2023/06/14/setup-leaflet-with-svelte-and-vite/
+  Leaflet.Icon.Default.prototype.options.iconUrl = markerIconUrl.src;
+  Leaflet.Icon.Default.prototype.options.iconRetinaUrl =
+    markerIconRetinaUrl.src;
+  Leaflet.Icon.Default.prototype.options.shadowUrl = markerShadowUrl.src;
+  Leaflet.Icon.Default.imagePath = ""; // necessary to avoid Leaflet adds some prefix to image path.
+
+  const mapPanel = document.querySelector("#map-panel");
+  const mapElement = document.querySelector("#map");
+
+  if (mapPanel && mapElement && mapElement instanceof HTMLElement) {
+    // Only initialize map when map panel is visible
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (
+          mutation.type === "attributes" &&
+          mutation.attributeName === "hidden" &&
+          !mapPanel.hasAttribute("hidden")
+        ) {
+          const winemakers = JSON.parse(
+            mapElement.dataset.winemakers || "",
+          ) as CollectionEntry<"makers">[];
+
+          const map = Leaflet.map("map");
+
+          Leaflet.tileLayer(
+            "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            {
+              attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            },
+          ).addTo(map);
+
+          if (winemakers.length > 0) {
+            const markers = Leaflet.markerClusterGroup({
+              iconCreateFunction: function (cluster) {
+                const markers = cluster.getAllChildMarkers();
+                return Leaflet.divIcon({
+                  className:
+                    "w-[40px] h-[40px] rounded-full bg-rose-600 text-yellow-50 hover:text-yellow-300 text-center text-lg pt-1 underline",
+                  html: `${markers.length}`,
+                  iconSize: Leaflet.point(40, 40),
+                });
+              },
+              maxClusterRadius: 40,
+            });
+
+            for (const winemaker of winemakers) {
+              const marker = Leaflet.marker(winemaker.data.coordinates, {
+                alt: `${winemaker.data.name}'${winemaker.data.name.endsWith("s") ? "" : "s"} location map marker`,
+              }).bindPopup(
+                `
+                  <p><strong>${winemaker.data.name}</strong></p>
+                  <p>${winemaker.data.location}<p>
+                  <a href="/winemakers/${winemaker.id}" class="block text-center">View details</a>`,
+              );
+              markers.addLayer(marker);
+            }
+
+            // Add markers to map
+            map.addLayer(markers);
+
+            const bounds = markers.getBounds();
+            map.fitBounds(bounds, { maxZoom: 6 });
+          }
+        }
+      }
+    });
+
+    observer.observe(mapPanel, { attributes: true });
+  }
+</script>
+
+<style>
+  @reference "../../styles/global.css";
+  /*
+    Need to nest in map so leaflet classes are used literally in rules, instead of astro appending
+    attribute selectors as part of bundling, breaking selectors
+  */
+  #map {
+    .leaflet-popup {
+      @apply border-2 border-emerald-600 bg-yellow-50 font-sans text-sm text-rose-950 shadow-lg shadow-neutral-900;
+
+      .leaflet-popup-content {
+        > *:first-child,
+        > *:last-child {
+          margin: 0;
+        }
+
+        * + * {
+          @apply my-[0.5em]!;
+        }
+      }
+
+      a {
+        @apply text-rose-600 underline hover:text-rose-300;
+      }
+
+      .leaflet-popup-close-button {
+        @apply no-underline;
+      }
+
+      .leaflet-popup-content-wrapper,
+      .leaflet-popup-tip {
+        @apply bg-yellow-50 text-rose-950;
+        box-shadow: none;
+      }
+    }
+  }
+</style>
+
+<SubpageLayout
+  description="Explore makers of the wines drunk along the way"
+  title="Winemakers"
+>
+  <h1
+    class="font-title text-center text-5xl tracking-wide text-rose-600 md:mb-16 md:text-7xl"
+  >
+    Winemakers
+  </h1>
+
+  <Tabs class="mt-8 w-full">
+    <Fragment slot="tabs">
+      {
+        TABS.map((tab) => (
+          <>
+            <Tab aria-selected={tab.id === "list"} tabId={tab.id}>
+              {tab.label}
+            </Tab>
+          </>
+        ))
+      }
+    </Fragment>
+    <Fragment slot="panels">
+      <TabPanel tabId="list">
+        <div
+          class="mx-auto mt-12 grid grid-cols-2 gap-5 lg:grid-cols-3 xl:grid-cols-4"
+        >
+          {
+            winemakers.map((maker) => (
+              <Card
+                as="a"
+                class="p-2 hover:text-rose-600 md:p-4 lg:p-8"
+                href={`/winemakers/${maker.id}`}
+              >
+                <h2 class="font-old-style text-center text-xl text-rose-950 md:text-2xl">
+                  {maker.data.name}
+                </h2>
+                <p class="mt-4 text-center text-base text-slate-800 italic md:text-lg">
+                  {maker.data.location}
+                </p>
+                <p class="mt-2 text-center text-sm text-slate-800 md:text-base">
+                  {wineCountByMaker[maker.id]}{" "}
+                  {wineCountByMaker[maker.id] === 1 ? "wine" : "wines"} tried
+                </p>
+              </Card>
+            ))
+          }
+        </div>
+      </TabPanel>
+
+      <TabPanel hidden tabId="map">
+        <div
+          class="-mx-8 mt-12 h-[800px] sm:mx-0"
+          data-winemakers={JSON.stringify(winemakers)}
+          id="map"
+        >
+        </div>
+      </TabPanel>
+    </Fragment>
+  </Tabs>
+</SubpageLayout>

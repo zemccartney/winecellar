@@ -1,0 +1,134 @@
+---
+import { getCollection, render } from "astro:content";
+
+import Card from "../../components/card.astro";
+import Link from "../../components/link.astro";
+import SubpageLayout from "../../layouts/subpage.astro";
+import Typography from "../../layouts/typography.astro";
+
+export const getStaticPaths = async () => {
+  const makers = await getCollection("makers");
+  return makers.map((maker) => {
+    return {
+      params: { id: maker.id },
+      props: { maker },
+    };
+  });
+};
+
+const { maker } = Astro.props;
+const wines = await getCollection("wines", ({ data }) => {
+  return data.maker.id === maker.id;
+});
+
+const { Content: Notes } = await render(maker);
+
+// TODO Proper 404 page
+if (!maker) {
+  return Astro.redirect("/winemakers");
+}
+---
+
+<script>
+  import Leaflet, { type LatLngExpression } from "leaflet";
+  import markerIconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
+  import markerIconUrl from "leaflet/dist/images/marker-icon.png";
+  import markerShadowUrl from "leaflet/dist/images/marker-shadow.png";
+  import "leaflet/dist/leaflet.css";
+
+  // https://cescobaz.com/2023/06/14/setup-leaflet-with-svelte-and-vite/
+  Leaflet.Icon.Default.prototype.options.iconUrl = markerIconUrl.src;
+  Leaflet.Icon.Default.prototype.options.iconRetinaUrl =
+    markerIconRetinaUrl.src;
+  Leaflet.Icon.Default.prototype.options.shadowUrl = markerShadowUrl.src;
+  Leaflet.Icon.Default.imagePath = ""; // necessary to avoid Leaflet adds some prefix to image path.
+
+  const mapElement = document.querySelector("#map");
+
+  // type guard to verify presence of dataset attr
+  if (mapElement && mapElement instanceof HTMLElement) {
+    const coordinates = JSON.parse(
+      mapElement.dataset.coordinates || "[]",
+    ) as LatLngExpression; // TODO How to enforce this type upstream?
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const winemakerName = mapElement.dataset.winemakerName!;
+
+    const map = Leaflet.map("map").setView(coordinates, 7);
+
+    Leaflet.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    Leaflet.marker(coordinates, {
+      alt: `${winemakerName}'${winemakerName.endsWith("s") ? "" : "s"} location map marker`,
+    }).addTo(map);
+  }
+</script>
+
+<style>
+  #map {
+    .leaflet-marker-icon {
+      cursor: default;
+    }
+  }
+</style>
+
+<SubpageLayout
+  description={`Details about the winemaker, ${maker.data.name}`}
+  title={`${maker.data.name}`}
+>
+  <Card class="-mx-8 mt-12 p-8 sm:mx-auto lg:max-w-2/3">
+    <h1 class="font-old-style mb-10 text-center text-5xl text-rose-950">
+      {maker.data.name}
+    </h1>
+    <div>
+      <div class="flex flex-col-reverse gap-4 sm:flex-col">
+        <h2 class="font-old-style text-2xl font-bold text-rose-950 italic">
+          {maker.data.location}
+        </h2>
+        <div
+          class="-mx-8 h-[400px] sm:mx-0"
+          data-coordinates={JSON.stringify(maker.data.coordinates)}
+          data-winemaker-name={maker.data.name}
+          id="map"
+        >
+        </div>
+      </div>
+
+      {
+        maker.data.website && (
+          <div class="text-center xl:mt-10">
+            <Link class="text-xl" href={maker.data.website}>
+              Check them out
+            </Link>
+          </div>
+        )
+      }
+    </div>
+
+    <Typography class="mx-auto mt-12 text-rose-950">
+      <h2 class="font-old-style mb-6 text-center text-2xl text-rose-950">
+        Wines Tried
+      </h2>
+      <ul class="grid !list-none grid-cols-1 gap-4 sm:grid-cols-2">
+        {
+          wines.map((wine) => (
+            <li class="font-old-style text-center text-2xl">
+              <Link href={`/wines/${wine.id}`}>{wine.data.name}</Link>
+            </li>
+          ))
+        }
+      </ul>
+      {
+        maker.body && (
+          <>
+            <hr />
+            <Notes components={{ a: Link }} />
+          </>
+        )
+      }
+    </Typography>
+  </Card>
+</SubpageLayout>

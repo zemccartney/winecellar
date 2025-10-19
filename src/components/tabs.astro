@@ -1,0 +1,51 @@
+---
+import type { ClassValue } from "clsx";
+
+interface Props {
+  class?: ClassValue;
+}
+
+const {
+  class: className,
+  ...rest // implicitly supports https://docs.astro.build/en/guides/styling/#passing-a-class-to-a-child-component
+} = Astro.props;
+---
+
+<script>
+  // Tab switching functionality
+  const tabsContainers = document.querySelectorAll(".tabs-container");
+
+  for (const tabsContainer of tabsContainers) {
+    const tabs = tabsContainer.querySelectorAll('[role="tab"]');
+
+    for (const tab of tabs) {
+      tab.addEventListener("click", () => {
+        // Handle panel visibility
+        const tabPanels = tabsContainer.querySelectorAll('[role="tabpanel"]');
+        for (const panel of tabPanels) {
+          if (panel.getAttribute("aria-labelledby") === tab.id) {
+            panel.removeAttribute("hidden");
+          } else {
+            panel.setAttribute("hidden", "true");
+          }
+        }
+
+        // Update tab selection state
+        tab.setAttribute("aria-selected", "true");
+        for (const otherTab of [...tabs].filter((t) => t.id !== tab.id)) {
+          otherTab.setAttribute("aria-selected", "false");
+        }
+      });
+    }
+  }
+</script>
+
+<div class:list={["tabs-container", className]} {...rest}>
+  <div role="tablist">
+    <slot name="tabs" />
+  </div>
+
+  <section class="panel-container">
+    <slot name="panels" />
+  </section>
+</div>

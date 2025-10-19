@@ -1,0 +1,29 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"a"> {
+  ["data-variant"]?: "accent" | "body" | "nav";
+}
+
+const {
+  class: className,
+  ["data-variant"]: variant = "body",
+  ...props
+} = Astro.props;
+---
+
+<a
+  class:list={[
+    {
+      "font-mono tracking-widest text-rose-400 no-underline hover:text-rose-900 hover:underline [&.active]:text-rose-900":
+        variant === "nav",
+      "font-sans text-rose-600 underline hover:text-rose-400":
+        variant === "body",
+      "font-title tracking-widest text-rose-600 underline decoration-wavy underline-offset-4 hover:text-rose-400":
+        variant === "accent",
+    },
+    className,
+  ]}
+  data-variant={variant}
+  {...props}><slot /></a
+>

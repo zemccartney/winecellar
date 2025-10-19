@@ -1,0 +1,86 @@
+[
+  {
+    "hue": "oklch(40% 43% 27deg)",
+    "id": "la-vinhota",
+    "maker": "domaine-balansa",
+    "name": "La Vinhota"
+  },
+  {
+    "hue": "#750023",
+    "id": "vin-de-frantz",
+    "maker": "marie-thibault-frantz-saumon",
+    "name": "Vin de Frantz"
+  },
+  {
+    "hue": "#430822",
+    "id": "pur-breton",
+    "maker": "olivier-cousin-domaine-cousin-leduc",
+    "name": "Pur Breton"
+  },
+  {
+    "hue": "#430822",
+    "id": "bel-soula",
+    "maker": "domaine-balansa",
+    "name": "Bel Soula"
+  },
+  {
+    "hue": "#430822",
+    "id": "el-marciano",
+    "maker": "alfredo-maestro",
+    "name": "El Marciano"
+  },
+  {
+    "hue": "#95002a",
+    "id": "avanti-popolo",
+    "maker": "le-temps-des-cerises",
+    "name": "Avanti Popolo"
+  },
+  {
+    "hue": "#430822",
+    "id": "alosa",
+    "maker": "cellar-comalats",
+    "name": "Alosa"
+  },
+  {
+    "hue": "oklch(40% 41% 31deg)",
+    "id": "bombisch-rose",
+    "maker": "christian-binner",
+    "name": "Bombisch! Rosé"
+  },
+  {
+    "hue": "oklch(55% 42% 45deg)",
+    "id": "pech-de-rozies",
+    "maker": "domaine-balansa",
+    "name": "Pech de Roziès"
+  },
+  {
+    "hue": "oklch(38% 34% 26deg)",
+    "id": "versicolore",
+    "maker": "domaine-balansa",
+    "name": "Versicolore"
+  },
+  {
+    "hue": "oklch(0.3384 0.1381 27.5)",
+    "id": "le-telquel",
+    "maker": "pierre-olivier-bonhomme",
+    "name": "Le Telquel"
+  },
+  {
+    "hue": "oklch(0.3196 0.1291 23.51)",
+    "id": "sittelle",
+    "maker": "chat-huant",
+    "name": "Sittelle"
+  },
+  {
+    "hue": "oklch(0.2611 0.1011 24.57)",
+    "id": "une-histoire-de-rouge",
+    "maker": "cyrille-sevin",
+    "name": "Une histoire de Rouge"
+  },
+  {
+    "hue": "oklch(0.3803 0.1489 19.14)",
+    "id": "sangiovese",
+    "maker": "broc-cellars",
+    "name": "Sangiovese"
+  }
+]

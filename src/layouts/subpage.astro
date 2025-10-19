@@ -1,0 +1,44 @@
+---
+import Link from "../components/link.astro";
+import Logo from "../components/logo.astro";
+import Shell from "./shell.astro";
+
+const props = Astro.props;
+---
+
+<script>
+  let currentPath = globalThis.location.pathname;
+  if (currentPath.endsWith("/")) {
+    // Normalize away trailing slash (Cloudflare 308s directory paths to trailing slash equiv e.g. /archive --> /archive/ )
+    currentPath = currentPath.slice(0, -1);
+  }
+  const navLink = document.querySelector(`nav a[href="${currentPath}"]`);
+  navLink?.classList.add("active", "pointer-events-none");
+</script>
+
+<Shell {...props}>
+  <header class="mx-auto w-fit">
+    <nav class="flex flex-col items-center gap-4 md:flex-row lg:gap-10">
+      <a href="/">
+        <h1
+          class="flex flex-col items-center justify-center gap-4 md:flex-row md:gap-2 lg:gap-8"
+        >
+          <Logo class="text-rose-600" data-variant="small" />
+          <span
+            class="font-title text-center text-4xl font-bold text-zinc-300 uppercase"
+            >wine cellar</span
+          >
+        </h1>
+      </a>
+
+      <Link class="text-2xl" data-variant="nav" href="/about"> about </Link>
+      <Link class="text-2xl" data-variant="nav" href="/wines"> wines </Link>
+      <Link class="text-2xl" data-variant="nav" href="/winemakers">
+        winemakers
+      </Link>
+    </nav>
+  </header>
+  <main class="mx-auto mt-16 md:container lg:mt-24">
+    <slot />
+  </main>
+</Shell>

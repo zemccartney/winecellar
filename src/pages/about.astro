@@ -1,0 +1,50 @@
+---
+import { Image } from "astro:assets";
+
+import Link from "../components/link.astro";
+import Boris from "../images/boris.jpg";
+import SubpageLayout from "../layouts/subpage.astro";
+import Typography from "../layouts/typography.astro";
+---
+
+<SubpageLayout
+  description="Details on the what and why of this online wine cellar"
+  title="About the project"
+>
+  <h1
+    class="font-title mt-8 text-center text-5xl tracking-wide text-rose-600 md:mt-12 md:text-7xl"
+  >
+    About the Cellar
+  </h1>
+  <figure class="mx-auto mt-12 w-fit">
+    <Image
+      alt="Boris Diaw, glass of wine raised, enjoying himself immensely"
+      src={Boris}
+      width="480"
+    />
+    <figcaption
+      class:list={[
+        "mx-auto mt-2 max-w-4/5 font-sans text-base text-zinc-300 italic",
+      ]}
+    >
+      <p>
+        Sourced from the <Link href="https://www.instagram.com/p/tf7v55DI3A"
+          >NBA's premier oenophile himself</Link
+        >
+      </p><p>
+        (<Link
+          href="https://www.nbcsports.com/nba/news/boris-diaw-throws-wine-in-gregg-popovichs-face-metaphorically"
+          >No worries, Pop!</Link
+        >)
+      </p>
+    </figcaption>
+  </figure>
+  <Typography class="mx-auto mt-12 text-zinc-300">
+    <p>
+      Keeping track of fancy wines tried and impressions of them. Vaguely more
+      info about me on <Link href="https://grepco.net/about/"
+        >my personal site</Link
+      >. Thanks for stopping by!
+    </p>
+  </Typography>
+</SubpageLayout>

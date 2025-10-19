@@ -1,0 +1,13 @@
+---
+import type { ClassValue } from "clsx";
+
+interface Props {
+  class?: ClassValue;
+}
+
+const { class: className } = Astro.props;
+---
+
+<p class:list={["ps-6 text-base font-light", className]}>
+  <slot />
+</p>

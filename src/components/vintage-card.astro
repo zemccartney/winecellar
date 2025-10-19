@@ -1,0 +1,61 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { ClassValue } from "clsx";
+
+import { Image } from "astro:assets";
+
+import Typography from "../layouts/typography.astro";
+import * as Utils from "../utils";
+import Card from "./card.astro";
+import Link from "./link.astro";
+
+interface Props {
+  class?: ClassValue;
+  maker: CollectionEntry<"makers">;
+  vintage: CollectionEntry<"vintages">;
+  wine: CollectionEntry<"wines">;
+}
+
+const { class: className, maker, vintage, wine } = Astro.props;
+---
+
+<Card class:list={["w-fit p-8", className]}>
+  <h1 class="font-old-style mb-0 text-center text-5xl text-rose-950">
+    {wine.data.name}
+  </h1>
+
+  <div class="mt-2 mb-10 text-center">
+    <Link class="font-old-style text-xl" href={`/winemakers/${maker.id}`}>
+      {maker.data.name}
+    </Link>
+  </div>
+
+  <Typography as="article" class="text-rose-950">
+    <div
+      class="mb-6 flex flex-col items-center justify-center md:flex-row md:gap-8"
+    >
+      <Image
+        alt={`${wine.data.name} ${Utils.getVintageYear(vintage)} bottle`}
+        class="border-4 border-zinc-800 ring-4 ring-zinc-800/60"
+        src={Utils.vintageImage(vintage)}
+        width="300"
+      />
+      <div class="mx-auto w-fit max-w-[75%] md:max-w-[50%]">
+        <h2
+          class="font-old-style mt-[2em] mb-[.75em] text-center text-3xl font-bold text-balance italic"
+        >
+          {Utils.getVintageYear(vintage)}
+        </h2>
+        <p class="text-center text-balance">
+          {vintage.data.cepage}
+        </p>
+      </div>
+    </div>
+    <div class="font-old-style block text-lg font-bold italic">
+      <slot name="tried-on" />
+    </div>
+    <p class="text-rose-950">
+      <slot />
+    </p>
+  </Typography>
+</Card>

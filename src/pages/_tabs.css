@@ -1,0 +1,17 @@
+@reference "../styles/global.css";
+
+[role="tablist"] {
+  @apply mx-auto mb-0 flex w-full flex-row justify-center gap-4 border-b-2 border-rose-600 sm:w-4/5 sm:gap-6 md:gap-8;
+}
+
+[role="tab"] {
+  @apply font-title flex items-center gap-2 rounded-t-4xl bg-rose-600 px-8 py-4 text-sm tracking-widest text-zinc-900 uppercase sm:px-12 sm:text-lg md:gap-3 md:text-2xl;
+}
+
+button[role="tab"][aria-selected="true"] {
+  @apply border-2 border-b-0 border-rose-600 bg-zinc-100;
+}
+
+button[role="tab"][aria-selected="false"] {
+  @apply cursor-pointer hover:bg-zinc-100 hover:outline-2 hover:outline-rose-600;
+}

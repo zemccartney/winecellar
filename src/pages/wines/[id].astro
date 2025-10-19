@@ -1,0 +1,113 @@
+---
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+import { getCollection, render } from "astro:content";
+import { getEntry } from "astro:content";
+
+import Link from "../../components/link.astro";
+import TabPanel from "../../components/tab-panel.astro";
+import Tab from "../../components/tab.astro";
+import Tabs from "../../components/tabs.astro";
+import VintageCard from "../../components/vintage-card.astro";
+import "../_tabs.css";
+import SubpageLayout from "../../layouts/subpage.astro";
+import * as Utils from "../../utils";
+
+export const getStaticPaths = async () => {
+  const wines = await getCollection("wines");
+  return wines.map((wine) => {
+    return {
+      params: { id: wine.id },
+      props: { wine },
+    };
+  });
+};
+
+const { wine } = Astro.props;
+
+const vintages = await getCollection("vintages", ({ data }) => {
+  return data.wine.id === wine.id;
+});
+
+const maker = await getEntry(wine.data.maker);
+
+const tastingNotesByVintage = Object.fromEntries(
+  vintages.map((vintage) => [vintage.id, undefined]),
+);
+for (const vintage of vintages) {
+  const { Content: tastingNotes } = await render(vintage);
+  // @ts-expect-error Complaining about astro component incompatible w/ undefined
+  tastingNotesByVintage[vintage.id] = tastingNotes;
+}
+
+// Sort vintages by year (newest first)
+vintages.sort((a, b) => b.id.localeCompare(a.id));
+---
+
+<SubpageLayout
+  description={`Details about ${wine.data.name} wine from ${maker.data.name}`}
+  title={`${wine.data.name}`}
+>
+  {
+    vintages.length > 1 ? (
+      <>
+        <Tabs class="mt-8 w-full">
+          <Fragment slot="tabs">
+            {vintages.map((vintage, i) => (
+              <>
+                <Tab aria-selected={i === 0} tabId={vintage.id}>
+                  {Utils.getVintageYear(vintage)}
+                </Tab>
+              </>
+            ))}
+          </Fragment>
+          <Fragment slot="panels">
+            {vintages.map((vintage, index) => (
+              <TabPanel hidden={index !== 0} tabId={vintage.id}>
+                <VintageCard
+                  class="-mx-8 mt-12 sm:mx-auto"
+                  maker={maker}
+                  vintage={vintage}
+                  wine={wine}
+                >
+                  <Fragment slot="tried-on">
+                    {`Tried on ${vintage.data.dateTried}`}
+                  </Fragment>
+                  <>
+                    {() => {
+                      const TastingNotes = tastingNotesByVintage[
+                        vintage.id
+                      ] as unknown as AstroComponentFactory;
+
+                      return <TastingNotes components={{ a: Link }} />;
+                    }}
+                  </>
+                </VintageCard>
+              </TabPanel>
+            ))}
+          </Fragment>
+        </Tabs>
+      </>
+    ) : (
+      <VintageCard
+        class="-mx-8 mt-12 sm:mx-auto"
+        maker={maker}
+        vintage={vintages[0]}
+        wine={wine}
+      >
+        <Fragment slot="tried-on">
+          {`Tried on ${vintages[0].data.dateTried}`}
+        </Fragment>
+        <>
+          {() => {
+            const TastingNotes = tastingNotesByVintage[
+              vintages[0].id
+            ] as unknown as AstroComponentFactory;
+
+            return <TastingNotes components={{ a: Link }} />;
+          }}
+        </>
+      </VintageCard>
+    )
+  }
+</SubpageLayout>

@@ -1,0 +1,17 @@
+---
+interface Props {
+  tabId: string;
+}
+
+const { tabId, ...rest } = Astro.props;
+---
+
+<button
+  aria-controls={`${tabId}-panel`}
+  id={`${tabId}-tab`}
+  role="tab"
+  type="button"
+  {...rest}
+>
+  <slot />
+</button>

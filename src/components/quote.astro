@@ -1,0 +1,40 @@
+---
+import type { ClassValue } from "clsx";
+
+import Link from "./link.astro";
+
+interface Props {
+  author?: string;
+  class?: ClassValue;
+  issue: string;
+  link: string;
+  source: string;
+}
+
+const { author, class: className, issue, link, source } = Astro.props;
+---
+
+<style>
+  blockquote {
+    > * + * {
+      @apply mt-[1.125em];
+    }
+  }
+</style>
+
+<figure class:list={["BIW-Quote", className]}>
+  <blockquote
+    cite={link}
+    class="border-l-4 border-rose-600 ps-8 text-2xl/relaxed"
+  >
+    <slot />
+  </blockquote>
+  <figcaption class="mt-6 max-w-[80%] ps-16 text-lg text-balance text-rose-600">
+    {author ? `${author} — ` : ""}
+    <cite class="not-italic">
+      <Link class="!tracking-tighter underline" data-variant="nav" href={link}
+        >"{issue}"</Link
+      ><span class="ml-2 italic">{source}</span>
+    </cite>
+  </figcaption>
+</figure>

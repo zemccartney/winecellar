@@ -1,0 +1,71 @@
+---
+interface Props {
+  class?: string;
+  ["data-variant"]?: "large" | "small" | "xl";
+  id?: string;
+}
+
+const {
+  class: className,
+  ["data-variant"]: variant = "medium",
+  ...rest
+} = Astro.props;
+---
+
+<style>
+  @reference "../styles/global.css";
+
+  .CellarLogo[data-variant="small"] {
+    .CellarLogo-ball {
+      @apply -top-1 right-5 text-[10px];
+    }
+
+    .CellarLogo-wine {
+      @apply text-3xl;
+    }
+  }
+
+  .CellarLogo[data-variant="medium"] {
+    .CellarLogo-ball {
+      @apply -top-2 right-10 text-base;
+    }
+
+    .CellarLogo-wine {
+      @apply text-6xl;
+    }
+  }
+
+  .CellarLogo[data-variant="large"] {
+    .CellarLogo-ball {
+      @apply -top-2 right-16 text-2xl;
+    }
+
+    .CellarLogo-wine {
+      @apply text-8xl;
+    }
+  }
+
+  .CellarLogo[data-variant="xl"] {
+    .CellarLogo-ball {
+      @apply top-4 right-12 text-4xl;
+    }
+
+    .CellarLogo-wine {
+      @apply text-[12rem];
+    }
+  }
+</style>
+
+<div
+  class:list={["CellarLogo", "font-emoji flex flex-col items-end", className]}
+  data-variant={variant}
+  {...rest}
+  aria-label="Cellar logo (wine glass emoji with a smaller basketball emoji hovering above, like the wine glass is a basket)"
+  role="img"
+>
+  {
+    /* Safari bug: font-bold (font-weight: 700) resulted in basketball disappearing; unclear why, so just removed */
+  }
+  <div class="CellarLogo-ball relative">&#127936;</div>
+  <div class="CellarLogo-wine">&#127863;</div>
+</div>

@@ -1,0 +1,88 @@
+---
+import type { HTMLTag, Polymorphic } from "astro/types";
+import type { ClassValue } from "clsx";
+
+type Props<Tag extends HTMLTag> = Polymorphic<{ as: Tag; class?: ClassValue }>;
+
+const { as = "div", class: className, ...rest } = Astro.props;
+
+const Tag = as;
+---
+
+<style>
+  @reference "../styles/global.css";
+
+  /* useful rule: style only immediate children: let every level of nesting control own spacing */
+  .TypoBox {
+    /* Base typography */
+    @apply font-sans text-xl leading-8;
+
+    /* Spacing rules */
+    @apply max-w-[35em];
+
+    /* Default spacing rules, override for specific elements as needed */
+    > * {
+      @apply my-[1.25em];
+    }
+
+    > *:first-child:not(:only-child) {
+      @apply mt-0;
+    }
+
+    > *:last-child:not(:only-child) {
+      @apply mb-0;
+    }
+
+    /*
+      Learned from https://www.smashingmagazine.com/2023/01/level-up-css-skills-has-selector/
+      A bit fragile, but saying that if a list is the only child in a "section" (as demarcated by h2s (currently header element of choice in posts))
+      cut the inline-start padding so it aligns with content in other "sections"
+      Based on display of "Who's Playing" list in first post (2024-10-22) (vestigial, comment originated during BIW-era)
+    */
+    > ul:is(h2 + *):not(* + h2) {
+      @apply ps-0;
+    }
+
+    > h2 {
+      @apply mt-[2em] mb-[.75em] text-center text-3xl font-bold italic;
+    }
+
+    > hr {
+      @apply my-12 h-0.5 bg-current;
+    }
+
+    > hr + * {
+      @apply mt-0;
+    }
+
+    > ul {
+      @apply list-inside list-disc;
+    }
+
+    @media (min-width: 768px) {
+      > ul {
+        @apply ps-[2em];
+      }
+    }
+
+    > ul > li {
+      @apply my-[0.5em];
+    }
+
+    > .BIW-Quote {
+      &:not(:first-child) {
+        /* loose spacing when listing quotations one after another (see 2025-02-17) */
+        @apply mt-20;
+
+        /* Tighten spacing when quotation appears within a paragraph i.e. body text immediately surrounding */
+        &:not(figure + *) {
+          @apply mt-[1.5em] mb-[3em];
+        }
+      }
+    }
+  }
+</style>
+
+<Tag class:list={["TypoBox", className]} {...rest}>
+  <slot />
+</Tag>
