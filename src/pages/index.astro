@@ -14,7 +14,7 @@ import Shell from "../layouts/shell.astro";
 
     // type guard to verify presence of dataset attr
     if (logo && logo instanceof HTMLElement) {
-      logo.dataset.variant = ev.matches ? "medium" : "large";
+      logo.dataset.variant = ev.matches ? "small" : "large";
     }
   }
 
@@ -24,9 +24,7 @@ import Shell from "../layouts/shell.astro";
 
 <Shell>
   <main>
-    <h1
-      class="flex flex-col items-center justify-center gap-6 md:mt-16 md:flex-row md:gap-2 lg:gap-8"
-    >
+    <h1 class="flex flex-row items-center justify-center gap-2 md:mt-16">
       <Logo class="text-rose-600" id="cellar-logo" />
       <span
         class="font-title self-center text-center text-4xl font-bold text-zinc-300 uppercase md:text-8xl"

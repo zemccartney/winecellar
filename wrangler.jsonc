@@ -5,13 +5,11 @@
   },
   "compatibility_date": "2025-10-17",
   "name": "winecellar",
+  "preview_urls": true,
   "routes": [
     {
       "custom_domain": true,
       "pattern": "wine.grepco.net"
     }
-  ],
-  "vars": {
-    "NODE_VERSION": 22
-  }
+  ]
 }
