@@ -2,6 +2,12 @@
 
 Archive of fancy wines tried
 
+## Install
+
+`npm run setup`, not `npm install`
+
+This enusres lavamoat runs allowed install scripts and links in allowed binaries
+
 ## Maintenance
 
 ### Convert HEIC image to PNG

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "erasableSyntaxOnly": true
+    "erasableSyntaxOnly": true,
+    "noUncheckedIndexedAccess": true
   },
   "exclude": ["dist"],
   "extends": "astro/tsconfigs/strict",

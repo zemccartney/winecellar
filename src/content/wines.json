@@ -82,5 +82,11 @@
     "id": "sangiovese",
     "maker": "broc-cellars",
     "name": "Sangiovese"
+  },
+  {
+    "hue": "oklch(0.2971 0.1184 19.84)",
+    "id": "instint-animal-negre",
+    "maker": "cal-xurriu",
+    "name": "Instint Animal Negre"
   }
 ]

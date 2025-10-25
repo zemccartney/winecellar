@@ -13,12 +13,11 @@ const formatter = new Intl.DateTimeFormat("en-US", {
 export const formatYYYYMMDD = (yyyymmdd: string) => {
   const parts = formatter.formatToParts(new Date(yyyymmdd));
 
-  // formatter should guarantee these parts exist
-  /* eslint-disable @typescript-eslint/no-non-null-assertion */
+  /* eslint-disable @typescript-eslint/no-non-null-assertion -- formatter should guarantee these parts exist */
   const day = parts.find((p) => p.type === "day")!;
   const month = parts.find((p) => p.type === "month")!;
   const year = parts.find((p) => p.type === "year")!;
-  /* eslint-enable @typescript-eslint/no-non-null-assertion */
+  /* eslint-enable @typescript-eslint/no-non-null-assertion -- paired w/ above */
 
   return `${month.value} ${day.value}, ${year.value}`;
 };
@@ -28,8 +27,10 @@ const vintageImages = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 export const vintageImage = (vintage: CollectionEntry<"vintages">) => {
-  return vintageImages[`/src/content/vintages/${vintage.id}.png`]?.();
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- If image not added, nothing we can or should do; accept the crash
+  return vintageImages[`/src/content/vintages/${vintage.id}.png`]!();
 };
 
 export const getVintageYear = (vintage: CollectionEntry<"vintages">) =>
-  vintage.id.split("/")[1].toLocaleUpperCase(); // uppercase handles nv (nonvintage) id
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Id structure derived from folder structure (see content/vintages)
+  vintage.id.split("/")[1]!.toLocaleUpperCase(); // uppercase handles nv (nonvintage) id

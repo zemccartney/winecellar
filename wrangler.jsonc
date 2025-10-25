@@ -11,5 +11,6 @@
       "custom_domain": true,
       "pattern": "wine.grepco.net"
     }
-  ]
+  ],
+  "workers_dev": false
 }

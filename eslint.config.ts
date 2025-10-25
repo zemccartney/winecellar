@@ -1,3 +1,5 @@
+// @ts-expect-error -- No type definitions shipped, not dealing w/ it
+import comments from "@eslint-community/eslint-plugin-eslint-comments/configs";
 import { includeIgnoreFile } from "@eslint/compat";
 import js from "@eslint/js";
 import json from "@eslint/json";
@@ -20,9 +22,16 @@ const gitignorePath = Path.resolve(__dirname, ".gitignore");
 export default defineConfig([
   includeIgnoreFile(gitignorePath),
   {
+    extends: [comments.recommended],
+    rules: {
+      "@eslint-community/eslint-comments/require-description": "error",
+    },
+  },
+  {
     extends: [packageJson.configs.recommended],
     rules: {
       "package-json/require-description": "off",
+      "package-json/require-license": "off", // TODO re-enable, figure out appropriate license
     },
   },
   {
@@ -57,7 +66,7 @@ export default defineConfig([
     },
   },
   {
-    files: ["*.{js,ts,mjs}"],
+    files: ["*.{js,ts,mjs}", "./scripts/*.js"],
     languageOptions: {
       globals: {
         ...globals.node,
