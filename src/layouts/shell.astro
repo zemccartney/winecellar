@@ -31,7 +31,9 @@ const { class: className, description, title } = Astro.props;
       content={description || "Keeping track of all the fancy wines I've tried"}
       name="description"
     />
+    <link href="/favicon.ico" rel="icon" sizes="32x32" />
     <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+    <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
     <script>
       import "lite-youtube-embed";
     </script>
@@ -50,6 +52,7 @@ const { class: className, description, title } = Astro.props;
           <script
             data-cf-beacon='{"token": "bbf61d7e5be04eedbfa08a852bcf48cd"}'
             defer
+            is:inline
             src="https://static.cloudflareinsights.com/beacon.min.js"
           />
         </>
