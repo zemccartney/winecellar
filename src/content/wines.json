@@ -88,5 +88,17 @@
     "id": "instint-animal-negre",
     "maker": "cal-xurriu",
     "name": "Instint Animal Negre"
+  },
+  {
+    "hue": "oklch(0.395 0.1583 18.28)",
+    "id": "tandem",
+    "maker": "domaine-de-brousse",
+    "name": "Tandem"
+  },
+  {
+    "hue": "oklch(0.3382 0.1115 22.3)",
+    "id": "langhe-freisa",
+    "maker": "giacomo-fenocchio",
+    "name": "Langhe Freisa"
   }
 ]

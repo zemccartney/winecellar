@@ -6,9 +6,25 @@ Archive of fancy wines tried
 
 `npm run setup`, not `npm install`
 
-This enusres lavamoat runs allowed install scripts and links in allowed binaries
+This ensures lavamoat runs allowed install scripts and links in allowed binaries
 
 ## Maintenance
+
+### Adding a wine
+
+1. Look up wine's maker, creating a new file under `content/makers` if no wines
+   tried from them
+   - do your best w/ looking up coordinates
+   - write down any interesting findings in markdown body
+
+2. Add to `wines.json`
+   - note color from screenshot, using color picker (plug hex into
+     https://oklch.com/)
+   - use maker id (filename / slug) from step 1
+
+3. Noting wine's vintage, add a folder using the wine's id to
+   `content/vintages`, within that adding a file and image titled according to
+   the vintage (year) e.g. `2023.mdx` and `2023.png`
 
 ### Convert HEIC image to PNG
 
