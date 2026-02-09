@@ -5,7 +5,9 @@ import "@fontsource/geist-mono/700.css";
 import "@fontsource/geist-sans/400.css";
 import "@fontsource/geist-sans/600.css";
 import "@fontsource/geist-sans/700.css";
+// @ts-expect-error -- ignore side-effect import check, we know this works
 import "@fontsource-variable/noto-emoji";
+// @ts-expect-error -- ignore side-effect import check, we know this works
 import "@fontsource/permanent-marker";
 import "lite-youtube-embed/src/lite-yt-embed.css";
 import type { ClassValue } from "clsx";
@@ -18,97 +20,115 @@ import PermanentMarkerFont from "@fontsource/permanent-marker/files/permanent-ma
 import "../styles/global.css";
 
 interface Props {
-  class?: ClassValue;
-  description?: string;
-  title?: string;
+    class?: ClassValue;
+    description?: string;
+    title?: string;
 }
 
 const { class: className, description, title } = Astro.props;
 ---
 
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width" name="viewport" />
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            content="width=device-width"
+            name="viewport"
+        />
 
-    <title>{`${title ? `${title} — ` : ""}Wine Cellar`}</title>
-    <meta
-      content={description || "Keeping track of all the fancy wines I've tried"}
-      name="description"
-    />
-    <link href="/favicon.ico" rel="icon" sizes="32x32" />
-    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
-    <link href="/apple-touch-icon.png" rel="apple-touch-icon" />
+        <title>{`${title ? `${title} — ` : ""}Wine Cellar`}</title>
+        <meta
+            content={description ||
+                "Keeping track of all the fancy wines I've tried"}
+            name="description"
+        />
+        <link
+            href="/favicon.ico"
+            rel="icon"
+            sizes="32x32"
+        />
+        <link
+            href="/favicon.svg"
+            rel="icon"
+            type="image/svg+xml"
+        />
+        <link
+            href="/apple-touch-icon.png"
+            rel="apple-touch-icon"
+        />
 
-    <link href="/sitemap-index.xml" rel="sitemap" />
+        <link
+            href="/sitemap-index.xml"
+            rel="sitemap"
+        />
 
-    <!-- Preload fonts to avoid font-jumps on page load (gap between LCP and fonts loading) -->
-    <link
-      as="font"
-      crossorigin="anonymous"
-      href={NotoFont4}
-      rel="preload"
-      type="font/woff2"
-    />
-    <link
-      as="font"
-      crossorigin="anonymous"
-      href={NotoFont6}
-      rel="preload"
-      type="font/woff2"
-    />
-    <link
-      as="font"
-      crossorigin="anonymous"
-      href={NotoFont7}
-      rel="preload"
-      type="font/woff2"
-    />
-    <link
-      as="font"
-      crossorigin="anonymous"
-      href={PermanentMarkerFont}
-      rel="preload"
-      type="font/woff2"
-    />
+        <!-- Preload fonts to avoid font-jumps on page load (gap between LCP and fonts loading) -->
+        <link
+            as="font"
+            crossorigin="anonymous"
+            href={NotoFont4}
+            rel="preload"
+            type="font/woff2"
+        />
+        <link
+            as="font"
+            crossorigin="anonymous"
+            href={NotoFont6}
+            rel="preload"
+            type="font/woff2"
+        />
+        <link
+            as="font"
+            crossorigin="anonymous"
+            href={NotoFont7}
+            rel="preload"
+            type="font/woff2"
+        />
+        <link
+            as="font"
+            crossorigin="anonymous"
+            href={PermanentMarkerFont}
+            rel="preload"
+            type="font/woff2"
+        />
 
-    <script>
-      import "lite-youtube-embed";
-    </script>
-  </head>
-  <body>
-    <div
-      class:list={["min-h-full bg-stone-950/90", className]}
-      id="cellar-container"
-    >
-      <div class="mx-auto p-8 md:container md:p-16"><slot /></div>
-    </div>
-    {/*  Cloudflare Web Analytics  */}
-    {
-      import.meta.env.PROD && (
-        <>
-          <script
-            data-cf-beacon='{"token": "bbf61d7e5be04eedbfa08a852bcf48cd"}'
-            defer
-            is:inline
-            src="https://static.cloudflareinsights.com/beacon.min.js"
-          />
-        </>
-      )
-    }
-  </body>
+        <script>
+            import "lite-youtube-embed";
+        </script>
+    </head>
+    <body>
+        <div
+            class:list={["min-h-full bg-stone-950/90", className]}
+            id="cellar-container"
+        >
+            <div class="mx-auto p-8 md:container md:p-16"><slot /></div>
+        </div>
+        {/*  Cloudflare Web Analytics  */}
+        {
+            import.meta.env.PROD && (
+                <>
+                    <script
+                        data-cf-beacon='{"token": "bbf61d7e5be04eedbfa08a852bcf48cd"}'
+                        defer
+                        is:inline
+                        src="https://static.cloudflareinsights.com/beacon.min.js"
+                    />
+                </>
+            )
+        }
+    </body>
 </html>
 
 <style>
-  html,
-  body {
-    height: 100%;
-  }
+    html,
+    body {
+        height: 100%;
+    }
 
-  #cellar-container {
-    /* Free Faux Stones SVG provided by SVGeez.com - CC 4.0 License - © 2019 Megan Young */
-    background-size: 25%;
-    background-repeat: repeat;
-    background-image: url("../images/rock.svg");
-  }
+    #cellar-container {
+        /* Free Faux Stones SVG provided by SVGeez.com - CC 4.0 License - © 2019 Megan Young */
+        background-size: 25%;
+        background-repeat: repeat;
+        background-image: url("../images/rock.svg");
+    }
 </style>

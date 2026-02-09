@@ -10,26 +10,26 @@ const Tag = as;
 ---
 
 <style>
-  @reference "../styles/global.css";
+    @reference "../styles/global.css";
 
-  /* hacky; assumes font colors used for wine and maker cards on list views, short cut to hover styling vs. writing a funky inline selector class on both */
-  a.CellarCard {
-    &:hover {
-      * {
-        @apply text-rose-600;
-      }
+    /* hacky; assumes font colors used for wine and maker cards on list views, short cut to hover styling vs. writing a funky inline selector class on both */
+    a.CellarCard {
+        &:hover {
+            * {
+                @apply text-rose-600;
+            }
+        }
     }
-  }
 </style>
 
 <Tag
-  class:list={[
-    "CellarCard",
-    "block border-3 border-emerald-600 bg-slate-50 shadow-lg shadow-neutral-900",
-    Tag === "a" && "cursor-pointer hover:bg-zinc-900",
-    className,
-  ]}
-  {...rest}
+    class:list={[
+        "CellarCard",
+        "block border-3 border-emerald-600 bg-slate-50 shadow-lg shadow-neutral-900",
+        Tag === "a" && "cursor-pointer hover:bg-zinc-900",
+        className
+    ]}
+    {...rest}
 >
-  <slot />
+    <slot />
 </Tag>

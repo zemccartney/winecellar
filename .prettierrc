@@ -1,18 +1,22 @@
 {
-  "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
-  "overrides": [
-    {
-      "files": "*.astro",
-      "options": {
-        "parser": "astro"
-      }
-    },
-    {
-      "files": "wrangler.jsonc",
-      "options": {
-        "trailingComma": "none"
-      }
-    }
-  ],
-  "proseWrap": "always"
+    "plugins": ["prettier-plugin-astro", "prettier-plugin-tailwindcss"],
+    "overrides": [
+        {
+            "files": "*.astro",
+            "options": {
+                "parser": "astro"
+            }
+        },
+        {
+            "files": "wrangler.jsonc",
+            "options": {
+                "trailingComma": "none"
+            }
+        }
+    ],
+    "experimentalTernaries": true,
+    "singleAttributePerLine": true,
+    "trailingComma": "none",
+    "tabWidth": 4,
+    "proseWrap": "always"
 }

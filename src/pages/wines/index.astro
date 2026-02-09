@@ -12,85 +12,88 @@ const fillXl = 4 - (wines.length % 4);
 ---
 
 <style>
-  @reference "../../styles/global.css";
-  .cork {
-    background-image: url(./_filter.svg);
-  }
+    @reference "../../styles/global.css";
+    .cork {
+        background-image: url(./_filter.svg);
+    }
 
-  .cell {
-    @apply bg-stone-800;
-    background-size: 150%;
-    background-repeat: repeat;
-    background-image: url("../../images/rock.svg");
-  }
+    .cell {
+        @apply bg-stone-800;
+        background-size: 150%;
+        background-repeat: repeat;
+        background-image: url("../../images/rock.svg");
+    }
 </style>
 
-<SubpageLayout description="Explore wines tried" title="Wines">
-  <h1
-    class="font-title text-center text-5xl tracking-wide text-rose-600 md:mb-16 md:text-7xl"
-  >
-    Wines
-  </h1>
+<SubpageLayout
+    description="Explore wines tried"
+    title="Wines"
+>
+    <h1
+        class="font-title text-center text-5xl tracking-wide text-rose-600 md:mb-16 md:text-7xl"
+    >
+        Wines
+    </h1>
 
-  <div
-    class="mx-auto mt-12 grid w-fit grid-cols-1 gap-5 border-20 border-[oklch(95%_21%_98deg)] border-y-[oklch(85%_21%_98deg)] bg-[oklch(80%_18%_98deg)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-  >
-    {
-      wines.map((wine) => (
-        <div class="cell relative">
-          <Card
-            as="a"
-            class="absolute top-1/10 left-1/10 z-10 w-4/5 p-1"
-            href={`/wines/${wine.id}`}
-          >
-            <h3 class="font-old-style text-center text-xl text-rose-950 underline md:text-2xl">
-              {wine.data.name}
-            </h3>
-            <p class="mt-1 mb-4 text-center text-base text-slate-800 italic md:text-lg">
-              {async () => {
-                const maker = await getEntry(wine.data.maker);
-                return maker.data.name;
-              }}
-            </p>
-          </Card>
-          <div
-            class="mx-auto h-[250px] w-[250px] rounded-full"
-            style={`background-color: ${wine.data.hue}`}
-          >
-            <div class="cork relative top-[85px] mx-auto h-[90px] w-[90px] rounded-full bg-amber-100 outline-8 outline-slate-200/65" />
-          </div>
+    <div
+        class="mx-auto mt-12 grid w-fit grid-cols-1 gap-5 border-20 border-[oklch(95%_21%_98deg)] border-y-[oklch(85%_21%_98deg)] bg-[oklch(80%_18%_98deg)] sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    >
+        {
+            wines.map((wine) => (
+                <div class="cell relative">
+                    <Card
+                        as="a"
+                        class="absolute top-1/10 left-1/10 z-10 w-4/5 p-1"
+                        href={`/wines/${wine.id}`}
+                    >
+                        <h3 class="font-old-style text-center text-xl text-rose-950 underline md:text-2xl">
+                            {wine.data.name}
+                        </h3>
+                        <p class="mt-1 mb-4 text-center text-base text-slate-800 italic md:text-lg">
+                            {async () => {
+                                const maker = await getEntry(wine.data.maker);
+                                return maker.data.name;
+                            }}
+                        </p>
+                    </Card>
+                    <div
+                        class="mx-auto h-[250px] w-[250px] rounded-full"
+                        style={`background-color: ${wine.data.hue}`}
+                    >
+                        <div class="cork relative top-[85px] mx-auto h-[90px] w-[90px] rounded-full bg-amber-100 outline-8 outline-slate-200/65" />
+                    </div>
+                </div>
+            ))
+        }
+        <div
+            class:list={[
+                "cell hidden h-[250px] w-[250px]",
+                {
+                    "lg:max-xl:block": fillLg >= 1 && fillLg < 3,
+                    "sm:max-lg:block": fillSm === 1,
+                    "xl:block": fillXl >= 1 && fillXl < 4
+                }
+            ]}
+        >
         </div>
-      ))
-    }
-    <div
-      class:list={[
-        "cell hidden h-[250px] w-[250px]",
-        {
-          "lg:max-xl:block": fillLg >= 1 && fillLg < 3,
-          "sm:max-lg:block": fillSm === 1,
-          "xl:block": fillXl >= 1 && fillXl < 4,
-        },
-      ]}
-    >
+        <div
+            class:list={[
+                "cell hidden h-[250px] w-[250px]",
+                {
+                    "lg:max-xl:block": fillLg >= 2 && fillLg < 3,
+                    "xl:block": fillXl >= 2 && fillXl < 4
+                }
+            ]}
+        >
+        </div>
+        <div
+            class:list={[
+                "cell hidden h-[250px] w-[250px]",
+                {
+                    "xl:block": fillXl === 3
+                }
+            ]}
+        >
+        </div>
     </div>
-    <div
-      class:list={[
-        "cell hidden h-[250px] w-[250px]",
-        {
-          "lg:max-xl:block": fillLg >= 2 && fillLg < 3,
-          "xl:block": fillXl >= 2 && fillXl < 4,
-        },
-      ]}
-    >
-    </div>
-    <div
-      class:list={[
-        "cell hidden h-[250px] w-[250px]",
-        {
-          "xl:block": fillXl === 3,
-        },
-      ]}
-    >
-    </div>
-  </div>
 </SubpageLayout>

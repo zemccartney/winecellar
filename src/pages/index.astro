@@ -5,49 +5,60 @@ import Shell from "../layouts/shell.astro";
 ---
 
 <script>
-  const mediaQueryList = globalThis.matchMedia(
-    "not all and (min-width: 768px)",
-  );
+    const mediaQueryList = globalThis.matchMedia(
+        "not all and (min-width: 768px)"
+    );
 
-  function handleOrientationChange(ev: MediaQueryList | MediaQueryListEvent) {
-    const logo = document.querySelector("#cellar-logo");
+    function handleOrientationChange(ev: MediaQueryList | MediaQueryListEvent) {
+        const logo = document.querySelector("#cellar-logo");
 
-    // type guard to verify presence of dataset attr
-    if (logo && logo instanceof HTMLElement) {
-      logo.dataset.variant = ev.matches ? "small" : "large";
+        // type guard to verify presence of dataset attr
+        if (logo && logo instanceof HTMLElement) {
+            logo.dataset.variant = ev.matches ? "small" : "large";
+        }
     }
-  }
 
-  handleOrientationChange(mediaQueryList);
-  mediaQueryList.addEventListener("change", handleOrientationChange);
+    handleOrientationChange(mediaQueryList);
+    mediaQueryList.addEventListener("change", handleOrientationChange);
 </script>
 
 <Shell>
-  <main>
-    <h1 class="flex flex-row items-center justify-center gap-2 md:mt-16">
-      <Logo class="text-rose-600" id="cellar-logo" />
-      <span
-        class="font-title self-center text-center text-4xl font-bold text-zinc-300 uppercase md:text-8xl"
-        >wine cellar</span
-      >
-    </h1>
+    <main>
+        <h1 class="flex flex-row items-center justify-center gap-2 md:mt-16">
+            <Logo
+                class="text-rose-600"
+                id="cellar-logo"
+            />
+            <span
+                class="font-title self-center text-center text-4xl font-bold text-zinc-300 uppercase md:text-8xl"
+                >wine cellar</span
+            >
+        </h1>
 
-    <Link
-      class="mx-auto mt-4 block w-fit text-3xl"
-      data-variant="nav"
-      href="/about"
-    >
-      about
-    </Link>
+        <Link
+            class="mx-auto mt-4 block w-fit text-3xl"
+            data-variant="nav"
+            href="/about"
+        >
+            about
+        </Link>
 
-    <div
-      class="mt-24 flex flex-col items-center justify-center gap-6 md:mt-40 md:flex-row md:gap-12"
-    >
-      <Link class="text-5xl" data-variant="accent" href="/wines">By wine</Link>
-      <div class="font-emoji mt-6 text-2xl text-stone-300">&#x1FAA8;</div>
-      <Link class="text-5xl" data-variant="accent" href="/winemakers"
-        >By maker</Link
-      >
-    </div>
-  </main>
+        <div
+            class="mt-24 flex flex-col items-center justify-center gap-6 md:mt-40 md:flex-row md:gap-12"
+        >
+            <Link
+                class="text-5xl"
+                data-variant="accent"
+                href="/wines"
+                >By wine</Link
+            >
+            <div class="font-emoji mt-6 text-2xl text-stone-300">&#x1FAA8;</div>
+            <Link
+                class="text-5xl"
+                data-variant="accent"
+                href="/winemakers"
+                >By maker</Link
+            >
+        </div>
+    </main>
 </Shell>

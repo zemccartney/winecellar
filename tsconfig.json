@@ -1,9 +1,16 @@
 {
-  "compilerOptions": {
-    "erasableSyntaxOnly": true,
-    "noUncheckedIndexedAccess": true
-  },
-  "exclude": ["dist"],
-  "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*"]
+    "compilerOptions": {
+        "erasableSyntaxOnly": true,
+        "noUncheckedIndexedAccess": true,
+        "noUncheckedSideEffectImports": true,
+        // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-7.html#path-rewriting-for-relative-paths
+        // can write out imports as .ts, not .js (supports direct execution, recommended by node's
+        // docs for type-stripping https://nodejs.org/docs/latest-v22.x/api/typescript.html#type-stripping)
+        "rewriteRelativeImportExtensions": true,
+        "verbatimModuleSyntax": true
+    },
+    "exclude": ["dist"],
+    "extends": "astro/tsconfigs/strict",
+    "include": [".astro/types.d.ts", "**/*"],
+    "types": ["node"]
 }
