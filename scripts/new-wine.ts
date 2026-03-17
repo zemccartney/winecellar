@@ -1,6 +1,13 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+interface Wine {
+    hue: string;
+    id: string;
+    maker: string;
+    name: string;
+}
+
 const makerId = process.argv[2];
 const wineId = process.argv[3];
 const vintageId = process.argv[4];
@@ -16,8 +23,7 @@ const vintagesDirPath = path.resolve("src/content/vintages");
 // 1. Update wines.json
 try {
     const winesJson = await fs.readFile(winesJsonPath, "utf8");
-    /** @type {{ hue: string; id: string; maker: string; name: string }[]} */
-    const wines = JSON.parse(winesJson);
+    const wines = JSON.parse(winesJson) as Wine[];
     if (wines.some((wine) => wine.id === wineId)) {
         console.log(`Wine "${wineId}" already exists in ${winesJsonPath}`);
     } else {
@@ -44,7 +50,7 @@ try {
     await fs.writeFile(makerFilePath, makerFileContent, { flag: "wx" });
     console.log(`Created maker file: ${makerFilePath}`);
 } catch (error) {
-    if (error.code === "EEXIST") {
+    if ((error as NodeJS.ErrnoException).code === "EEXIST") {
         console.log(`Maker file already exists: ${makerFilePath}`);
     } else {
         console.error(`Error creating maker file:`, error);
@@ -60,7 +66,7 @@ try {
     await fs.writeFile(vintageFilePath, vintageFileContent, { flag: "wx" });
     console.log(`Created vintage file: ${vintageFilePath}`);
 } catch (error) {
-    if (error.code === "EEXIST") {
+    if ((error as NodeJS.ErrnoException).code === "EEXIST") {
         console.log(`Vintage file already exists: ${vintageFilePath}`);
     } else {
         console.error(`Error creating vintage file:`, error);
