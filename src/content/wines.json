@@ -106,5 +106,17 @@
         "id": "soul-of-the-mountain-the-bull",
         "maker": "olifantsberg",
         "name": "Soul of the Mountain, The Bull"
+    },
+    {
+        "hue": "oklch(0.50 0.19 20)",
+        "id": "jalava",
+        "maker": "le-temps-des-cerises",
+        "name": "Jalava"
+    },
+    {
+        "hue": "oklch(0.9118 0.1554 97.47 / 83.79%)",
+        "id": "preambule",
+        "maker": "emmanuel-haget",
+        "name": "Préambule"
     }
 ]

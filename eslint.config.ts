@@ -8,7 +8,6 @@ import packageJson from "eslint-plugin-package-json";
 import perfectionist from "eslint-plugin-perfectionist";
 import unicorn from "eslint-plugin-unicorn";
 import { defineConfig } from "eslint/config";
-import globals from "globals";
 import Path from "node:path";
 import tseslint from "typescript-eslint";
 
@@ -73,14 +72,6 @@ export default defineConfig([
         languageOptions: {
             parserOptions: {
                 projectService: true
-            }
-        }
-    },
-    {
-        files: ["*.{js,ts,mjs}", "./scripts/*.js"],
-        languageOptions: {
-            globals: {
-                ...globals.node
             }
         }
     },
